@@ -1,27 +1,161 @@
 @import "tailwindcss";
-@import "@heroui/styles"; 
+@import "@heroui/styles";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ============================================
+   🌗 HIRELOOP THEME SYSTEM — Light & Dark
+   ============================================ */
+
+/* ----- LIGHT THEME (default) ----- */
+:root,
+[data-theme="light"] {
+    /* 🎨 Primary Colors */
+    --color-primary: #3b82f6;
+    --color-primary-hover: #2563eb;
+    --color-primary-light: #dbeafe;
+    --color-primary-dark: #1d4ed8;
+
+    --color-secondary: #f97316;
+    --color-secondary-hover: #ea580c;
+    --color-secondary-light: #fed7aa;
+
+    --color-accent: #6366f1;
+    --color-accent-hover: #4f46e5;
+    --color-accent-light: #e0e7ff;
+
+    /* 🖌️ Surfaces & Backgrounds */
+    --bg-base: #ffffff;
+    --bg-surface: #f8fafc;
+    --bg-elevated: #f1f5f9;
+    --bg-card: #ffffff;
+    --bg-navbar: rgba(255, 255, 255, 0.95);
+    --bg-footer: #f8fafc;
+    --bg-mobile-menu: #ffffff;
+    --bg-input: #ffffff;
+    --bg-hover: #f1f5f9;
+
+    /* 📝 Text Colors */
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --text-inverse: #ffffff;
+    --text-link: #3b82f6;
+    --text-link-hover: #2563eb;
+
+    /* 🧩 Border Colors */
+    --border-color: #e2e8f0;
+    --border-light: #f1f5f9;
+    --border-dark: #cbd5e1;
+
+    /* ✨ Shadows */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+    /* 🧭 Navbar Specific (Light) */
+    --nav-text: #334155;
+    --nav-text-hover: #0f172a;
+    --nav-text-active: #0f172a;
+
+    /* 🎯 Special */
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-error: #ef4444;
+    --color-info: #3b82f6;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ----- DARK THEME ----- */
+[data-theme="dark"] {
+    /* 🎨 Primary Colors */
+    --color-primary: #60a5fa;
+    --color-primary-hover: #3b82f6;
+    --color-primary-light: #1e3a5f;
+    --color-primary-dark: #93c5fd;
+
+    --color-secondary: #fb923c;
+    --color-secondary-hover: #f97316;
+    --color-secondary-light: #7c3a1e;
+
+    --color-accent: #818cf8;
+    --color-accent-hover: #6366f1;
+    --color-accent-light: #312e81;
+
+    /* 🖌️ Surfaces & Backgrounds */
+    --bg-base: #0a0a0a;
+    --bg-surface: #111111;
+    --bg-elevated: #1a1a1a;
+    --bg-card: #1a1a1a;
+    --bg-navbar: rgba(18, 18, 18, 0.95);
+    --bg-footer: #0d0d0d;
+    --bg-mobile-menu: #1a1a1a;
+    --bg-input: #1a1a1a;
+    --bg-hover: #2a2a2a;
+
+    /* 📝 Text Colors */
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --text-inverse: #0f172a;
+    --text-link: #60a5fa;
+    --text-link-hover: #93c5fd;
+
+    /* 🧩 Border Colors */
+    --border-color: #2a2a2a;
+    --border-light: #1f1f1f;
+    --border-dark: #333333;
+
+    /* ✨ Shadows */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+
+    /* 🧭 Navbar Specific (Dark) */
+    --nav-text: #9ca3af;
+    --nav-text-hover: #e5e7eb;
+    --nav-text-active: #ffffff;
+
+    /* 🎯 Special */
+    --color-success: #34d399;
+    --color-warning: #fbbf24;
+    --color-error: #f87171;
+    --color-info: #60a5fa;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ============================================
+   🌐 BASE GLOBAL STYLES
+   ============================================ */
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Selection highlight */
+::selection {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-surface);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--text-muted);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
 }
