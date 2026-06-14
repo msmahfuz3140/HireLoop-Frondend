@@ -88,7 +88,7 @@ export default function Navbar() {
 
                     {/* Auth Buttons */}
                     <Link
-                        href="/signin"
+                        href="/auth/signin"
                         className="transition-colors font-semibold"
                         style={{
                             color: isActive('/signin') ? 'var(--nav-text-active)' : 'var(--color-accent)',
@@ -104,7 +104,7 @@ export default function Navbar() {
                     </Link>
 
                     <Link
-                        href="/signup"
+                        href="/auth/signup"
                         className="text-white px-5 py-2.5 rounded-full transition-all duration-300 font-medium text-sm transform hover:-translate-y-[1px]"
                         style={{
                             background: 'linear-gradient(to right, var(--color-accent-hover), var(--color-accent))',
@@ -194,7 +194,7 @@ export default function Navbar() {
                     <hr style={{ borderColor: 'var(--border-color)' }} className="my-3" />
 
                     <Link
-                        href="/signin"
+                        href="/auth/signin"
                         onClick={() => setIsOpen(false)}
                         className="block text-center px-4 py-2.5 rounded-xl font-semibold transition-all"
                         style={{
@@ -206,7 +206,7 @@ export default function Navbar() {
                     </Link>
 
                     <Link
-                        href="/signup"
+                        href="/auth/signup"
                         onClick={() => setIsOpen(false)}
                         className="block text-center text-white px-4 py-2.5 rounded-xl font-medium shadow-lg"
                         style={{
