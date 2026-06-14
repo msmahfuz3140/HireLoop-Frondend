@@ -1,6 +1,11 @@
 'use client';
 
+import CtaBannerSection from "@/components/CtaBanner";
+import FeaturesSection from "@/components/Features";
+import JobBoard from "@/components/JobBoard";
 import JobSearchBar from "@/components/JobSearchBar";
+import PricingSection from "@/components/Pricing";
+import StatsSection from "@/components/StatsSection";
 import { useTheme } from "@/context/ThemeContext";
 
 export default function Home() {
@@ -12,6 +17,11 @@ export default function Home() {
       style={{ backgroundColor: 'var(--bg-base)' }}
     >
       <JobSearchBar />
+      <StatsSection />
+      <JobBoard />
+      <FeaturesSection />
+      <PricingSection />
+      <CtaBannerSection />
     </div>
   );
 }

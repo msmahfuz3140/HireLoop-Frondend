@@ -18,7 +18,7 @@ export default function Footer() {
                 <div className="md:col-span-5 flex flex-col justify-between space-y-6">
                     <div className="space-y-4">
                         {/* Logo */}
-                        <Link href="/" className="text-2xl font-bold flex items-center tracking-tight select-none">
+                        <Link href="/" className="text-4xl font-bold flex items-center tracking-tight select-none">
                             <span className="text-[#3b82f6] font-extrabold">hire</span>
                             <span className="text-[#f97316] font-medium">l</span>
                             <span className="text-[#2563eb] font-black text-3xl mx-[1px] -mt-[2px]">∞</span>
@@ -178,7 +178,7 @@ export default function Footer() {
                 className="max-w-7xl mx-auto mt-12 pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-4 text-xs"
                 style={{ borderColor: 'var(--border-color)', color: 'var(--text-muted)' }}
             >
-                <p>Copyright {currentYear} —Programming Hero</p>
+                <p>Copyright {currentYear} —HireLoop</p>
                 <div className="flex items-center space-x-4">
                     {['Terms & Policy', 'Privacy Guideline'].map((item, idx) => {
                         const hrefs = ['/terms', '/privacy'];
