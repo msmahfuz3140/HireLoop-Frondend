@@ -104,8 +104,14 @@ const SignUp = () => {
             }
 
             if (data) {
-                setSuccess('Account created successfully! Redirecting to dashboard...');
-                setTimeout(() => {
+                setSuccess('Account created successfully! Redirecting to sign in...');
+                // Clear any session that might have been created
+                setTimeout(async () => {
+                    try {
+                        await authClient.signOut();
+                    } catch (e) {
+                        // Ignore sign out errors
+                    }
                     window.location.href = '/auth/signin';
                 }, 1500);
             }

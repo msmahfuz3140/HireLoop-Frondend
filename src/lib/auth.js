@@ -7,29 +7,40 @@ if (!process.env.MONGO_DB_URI) {
 }
 
 const client = new MongoClient(process.env.MONGO_DB_URI);
-const dbName = process.env.AUTH_DB_NAME || 'hireloop-auth';
+const dbName = process.env.AUTH_DB_NAME || 'hire_loop';
 
-// Lazy connection - connect when first needed
-let dbPromise = null;
+// Connect to MongoDB immediately
+client.connect()
+    .then(() => {
+        console.log('Connected to MongoDB successfully');
+    })
+    .catch((error) => {
+        console.error('Failed to connect to MongoDB:', error);
+    });
 
-function getDb() {
-    if (!dbPromise) {
-        dbPromise = client.connect().then(() => {
-            console.log('Connected to MongoDB successfully');
-            return client.db(dbName);
-        }).catch((error) => {
-            console.error('Failed to connect to MongoDB:', error);
-            throw error;
-        });
-    }
-    return dbPromise;
-}
+const db = client.db(dbName);
 
 export const auth = betterAuth({
     emailAndPassword: {
         enabled: true,
     },
-    database: mongodbAdapter(client.db(dbName), {
+    database: mongodbAdapter(db, {
         client
     }),
+    session: {
+        expiresIn: 60 * 60 * 24 * 7, // 7 days
+        updateAge: 60 * 60 * 24, // 1 day
+        cookieCache: {
+            enabled: true,
+            maxAge: 5 * 60, // 5 minutes
+        },
+    },
+    user: {
+        additionalFields: {
+            image: {
+                type: 'string',
+                required: false,
+            },
+        },
+    },
 });

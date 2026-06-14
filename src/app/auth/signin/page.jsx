@@ -51,7 +51,7 @@ const SignIn = () => {
             if (data) {
                 setSuccess('Signed in successfully! Redirecting...');
                 setTimeout(() => {
-                    window.location.href = '/dashboard';
+                    window.location.href = '/';
                 }, 1500);
             }
         } catch (err) {

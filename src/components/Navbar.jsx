@@ -3,12 +3,99 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 import { useTheme } from '@/context/ThemeContext';
+import { useSession, signOut } from '@/lib/auth-client';
+
+const UserAvatar = ({ session, isDropdownOpen, setIsDropdownOpen, handleLogout }) => {
+    const getUserInitial = () => {
+        if (session?.user?.name) {
+            return session.user.name.charAt(0).toUpperCase();
+        }
+        if (session?.user?.email) {
+            return session.user.email.charAt(0).toUpperCase();
+        }
+        return 'M';
+    };
+
+    const initial = getUserInitial();
+    const hasImage = session?.user?.image;
+
+    return (
+        <div className="relative">
+            <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2"
+                style={{
+                    backgroundColor: hasImage ? 'transparent' : 'var(--color-accent)',
+                    border: hasImage ? '2px solid var(--border-color)' : 'none',
+                }}
+            >
+                {hasImage ? (
+                    <Image
+                        src={session.user.image}
+                        alt="User avatar"
+                        width={40}
+                        height={40}
+                        className="w-full h-full rounded-full object-cover"
+                    />
+                ) : (
+                    <span className="text-white font-semibold text-lg">
+                        {initial}
+                    </span>
+                )}
+            </button>
+
+            {isDropdownOpen && (
+                <div
+                    className="absolute right-0 mt-2 w-56 rounded-xl border shadow-xl z-50"
+                    style={{
+                        backgroundColor: 'var(--bg-elevated)',
+                        borderColor: 'var(--border-color)',
+                        maxWidth: '280px',
+                    }}
+                >
+                    <div className="p-3 border-b" style={{ borderColor: 'var(--border-color)' }}>
+                        <p
+                            className="text-sm font-medium truncate"
+                            style={{ color: 'var(--text-primary)' }}
+                        >
+                            {session?.user?.name || session?.user?.email}
+                        </p>
+                        <p
+                            className="text-xs truncate"
+                            style={{ color: 'var(--text-muted)' }}
+                        >
+                            {session?.user?.email}
+                        </p>
+                    </div>
+                    <button
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-3 text-sm transition-colors hover:bg-opacity-50"
+                        style={{ color: 'var(--text-secondary)' }}
+                        onMouseEnter={(e) => {
+                            e.target.style.backgroundColor = 'var(--bg-hover)';
+                            e.target.style.color = 'var(--text-primary)';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.target.style.backgroundColor = 'transparent';
+                            e.target.style.color = 'var(--text-secondary)';
+                        }}
+                    >
+                        Sign Out
+                    </button>
+                </div>
+            )}
+        </div>
+    );
+};
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const pathname = usePathname();
     const { theme, toggleTheme } = useTheme();
+    const { data: session } = useSession();
 
     const navLinks = [
         { name: 'Browse Jobs', href: '/browse-jobs' },
@@ -17,6 +104,11 @@ export default function Navbar() {
     ];
 
     const isActive = (path) => pathname === path;
+
+    const handleLogout = async () => {
+        await signOut();
+        setIsDropdownOpen(false);
+    };
 
     return (
         <nav
@@ -87,31 +179,42 @@ export default function Navbar() {
                     </button>
 
                     {/* Auth Buttons */}
-                    <Link
-                        href="/auth/signin"
-                        className="transition-colors font-semibold"
-                        style={{
-                            color: isActive('/signin') ? 'var(--nav-text-active)' : 'var(--color-accent)',
-                        }}
-                        onMouseEnter={(e) => {
-                            if (!isActive('/signin')) e.target.style.color = 'var(--color-accent-hover)';
-                        }}
-                        onMouseLeave={(e) => {
-                            if (!isActive('/signin')) e.target.style.color = 'var(--color-accent)';
-                        }}
-                    >
-                        Sign In
-                    </Link>
+                    {session ? (
+                        <UserAvatar
+                            session={session}
+                            isDropdownOpen={isDropdownOpen}
+                            setIsDropdownOpen={setIsDropdownOpen}
+                            handleLogout={handleLogout}
+                        />
+                    ) : (
+                        <>
+                            <Link
+                                href="/auth/signin"
+                                className="transition-colors font-semibold"
+                                style={{
+                                    color: isActive('/signin') ? 'var(--nav-text-active)' : 'var(--color-accent)',
+                                }}
+                                onMouseEnter={(e) => {
+                                    if (!isActive('/signin')) e.target.style.color = 'var(--color-accent-hover)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    if (!isActive('/signin')) e.target.style.color = 'var(--color-accent)';
+                                }}
+                            >
+                                Sign In
+                            </Link>
 
-                    <Link
-                        href="/auth/signup"
-                        className="text-white px-5 py-2.5 rounded-full transition-all duration-300 font-medium text-sm transform hover:-translate-y-[1px]"
-                        style={{
-                            background: 'linear-gradient(to right, var(--color-accent-hover), var(--color-accent))',
-                        }}
-                    >
-                        Get Started
-                    </Link>
+                            <Link
+                                href="/auth/signup"
+                                className="text-white px-5 py-2.5 rounded-full transition-all duration-300 font-medium text-sm transform hover:-translate-y-[1px]"
+                                style={{
+                                    background: 'linear-gradient(to right, var(--color-accent-hover), var(--color-accent))',
+                                }}
+                            >
+                                Get Started
+                            </Link>
+                        </>
+                    )}
                 </div>
 
                 {/* MOBILE: Theme Toggle + Hamburger */}
@@ -193,28 +296,43 @@ export default function Navbar() {
 
                     <hr style={{ borderColor: 'var(--border-color)' }} className="my-3" />
 
-                    <Link
-                        href="/auth/signin"
-                        onClick={() => setIsOpen(false)}
-                        className="block text-center px-4 py-2.5 rounded-xl font-semibold transition-all"
-                        style={{
-                            backgroundColor: isActive('/signin') ? 'var(--bg-hover)' : 'transparent',
-                            color: isActive('/signin') ? 'var(--nav-text-active)' : 'var(--color-accent)',
-                        }}
-                    >
-                        Sign In
-                    </Link>
+                    {session ? (
+                        <>
+                            <div className="px-4 py-2">
+                                <UserAvatar
+                                    session={session}
+                                    isDropdownOpen={isDropdownOpen}
+                                    setIsDropdownOpen={setIsDropdownOpen}
+                                    handleLogout={handleLogout}
+                                />
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <Link
+                                href="/auth/signin"
+                                onClick={() => setIsOpen(false)}
+                                className="block text-center px-4 py-2.5 rounded-xl font-semibold transition-all"
+                                style={{
+                                    backgroundColor: isActive('/signin') ? 'var(--bg-hover)' : 'transparent',
+                                    color: isActive('/signin') ? 'var(--nav-text-active)' : 'var(--color-accent)',
+                                }}
+                            >
+                                Sign In
+                            </Link>
 
-                    <Link
-                        href="/auth/signup"
-                        onClick={() => setIsOpen(false)}
-                        className="block text-center text-white px-4 py-2.5 rounded-xl font-medium shadow-lg"
-                        style={{
-                            background: 'linear-gradient(to right, var(--color-accent-hover), var(--color-accent))',
-                        }}
-                    >
-                        Get Started
-                    </Link>
+                            <Link
+                                href="/auth/signup"
+                                onClick={() => setIsOpen(false)}
+                                className="block text-center text-white px-4 py-2.5 rounded-xl font-medium shadow-lg"
+                                style={{
+                                    background: 'linear-gradient(to right, var(--color-accent-hover), var(--color-accent))',
+                                }}
+                            >
+                                Get Started
+                            </Link>
+                        </>
+                    )}
                 </div>
             )}
         </nav>
