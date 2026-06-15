@@ -41,6 +41,66 @@ export const auth = betterAuth({
                 type: 'string',
                 required: false,
             },
+            coverImage: {
+                type: 'string',
+                required: false,
+            },
+            phone: {
+                type: 'string',
+                required: false,
+            },
+            location: {
+                type: 'string',
+                required: false,
+            },
+            jobTitle: {
+                type: 'string',
+                required: false,
+            },
+            bio: {
+                type: 'string',
+                required: false,
+            },
+            skills: {
+                type: 'string',
+                required: false,
+            },
+            languages: {
+                type: 'string',
+                required: false,
+            },
+            linkedin: {
+                type: 'string',
+                required: false,
+            },
+            github: {
+                type: 'string',
+                required: false,
+            },
+            twitter: {
+                type: 'string',
+                required: false,
+            },
+            website: {
+                type: 'string',
+                required: false,
+            },
+            youtube: {
+                type: 'string',
+                required: false,
+            },
+            resumeUrl: {
+                type: 'string',
+                required: false,
+            },
+            notificationEmail: {
+                type: 'boolean',
+                required: false,
+            },
+            userTheme: {
+                type: 'string',
+                required: false,
+            },
         },
     },
 });

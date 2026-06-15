@@ -2,12 +2,12 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useTheme } from '@/context/ThemeContext';
 import { useSession, signOut } from '@/lib/auth-client';
 
-const UserAvatar = ({ session, isDropdownOpen, setIsDropdownOpen, handleLogout }) => {
+const UserAvatar = ({ session, isDropdownOpen, setIsDropdownOpen, handleLogout, router }) => {
     const getUserInitial = () => {
         if (session?.user?.name) {
             return session.user.name.charAt(0).toUpperCase();
@@ -20,6 +20,11 @@ const UserAvatar = ({ session, isDropdownOpen, setIsDropdownOpen, handleLogout }
 
     const initial = getUserInitial();
     const hasImage = session?.user?.image;
+
+    const handleNavigation = (path) => {
+        setIsDropdownOpen(false);
+        router.push(path);
+    };
 
     return (
         <div className="relative">
@@ -69,9 +74,11 @@ const UserAvatar = ({ session, isDropdownOpen, setIsDropdownOpen, handleLogout }
                             {session?.user?.email}
                         </p>
                     </div>
+
+                    {/* My Profile Link */}
                     <button
-                        onClick={handleLogout}
-                        className="w-full text-left px-4 py-3 text-sm transition-colors hover:bg-opacity-50"
+                        onClick={() => handleNavigation('/profile')}
+                        className="w-full text-left px-4 py-3 text-sm transition-colors flex items-center gap-2"
                         style={{ color: 'var(--text-secondary)' }}
                         onMouseEnter={(e) => {
                             e.target.style.backgroundColor = 'var(--bg-hover)';
@@ -82,6 +89,29 @@ const UserAvatar = ({ session, isDropdownOpen, setIsDropdownOpen, handleLogout }
                             e.target.style.color = 'var(--text-secondary)';
                         }}
                     >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        My Profile
+                    </button>
+
+                    {/* Sign Out Button */}
+                    <button
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-3 text-sm transition-colors flex items-center gap-2 rounded-b-xl"
+                        style={{ color: 'var(--text-secondary)' }}
+                        onMouseEnter={(e) => {
+                            e.target.style.backgroundColor = 'var(--bg-hover)';
+                            e.target.style.color = 'var(--text-primary)';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.target.style.backgroundColor = 'transparent';
+                            e.target.style.color = 'var(--text-secondary)';
+                        }}
+                    >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
                         Sign Out
                     </button>
                 </div>
@@ -94,6 +124,7 @@ export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const pathname = usePathname();
+    const router = useRouter();
     const { theme, toggleTheme } = useTheme();
     const { data: session } = useSession();
 
@@ -185,6 +216,7 @@ export default function Navbar() {
                             isDropdownOpen={isDropdownOpen}
                             setIsDropdownOpen={setIsDropdownOpen}
                             handleLogout={handleLogout}
+                            router={router}
                         />
                     ) : (
                         <>
@@ -304,6 +336,7 @@ export default function Navbar() {
                                     isDropdownOpen={isDropdownOpen}
                                     setIsDropdownOpen={setIsDropdownOpen}
                                     handleLogout={handleLogout}
+                                    router={router}
                                 />
                             </div>
                         </>
